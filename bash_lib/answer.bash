@@ -24,4 +24,6 @@ function command::answer() {
     log::warn "Wrong answer"
     exit 1
   fi
+
+  log::info "YAY!! Correct"
 }

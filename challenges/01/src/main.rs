@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -27,15 +28,16 @@ fn main() {
         }
     }
 
-    // Sort the vectors
-    team1_list.sort();
-    team2_list.sort();
+    // For each key in team1, we want to find how many times it appears in team2
+    let mut team2_frequency: HashMap<u32, u32> = HashMap::new();
+    for &item in &team2_list {
+        *team2_frequency.entry(item).or_insert(0) += 1;
+    }
 
     // Compute an answer
     let ans: u32 = team1_list
-        .iter()
-        .zip(team2_list.iter())
-        .map(|(t1, t2)| (t1.abs_diff(*t2)))
+        .into_iter()
+        .map(|t1| t1 * team2_frequency.get(&t1).unwrap_or(&0))
         .sum();
     println!("{}", ans);
 }
